@@ -4,19 +4,23 @@
     "description": "Convert deezer playlist to spotify",
     "version": "1.0",
     "action": {
-        "default_popup": "main.html",
-        "default_icon": "hello_extensions.png"
+        "default_popup": "popup/main.html",
+        "default_icon": "icons/popup.png"
     },
     "permissions": [
-        "activeTab",
-        "storage"
+        "tabs",
+        "storage",
+        "webRequest"
     ],
+    "background": {
+        "service_worker": "service-worker.js"
+    },
     "content_scripts": [
         {
             "matches": [
                 "<all_urls>"
             ],
-            "js": ["scripts/storage.js", "scripts/request.js"]
+            "js": ["popup/popup.js", "scripts/request_deezer.js", "callback_spotify/callback.js"]
           
         }
     ]

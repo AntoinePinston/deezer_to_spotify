@@ -1,7 +1,7 @@
 //https://deezer.page.link/XRcZ9eKhfgaWY5rB7
 
 function save_field(field) {
-    var dataToSave = { playlist: field };
+    let dataToSave = { playlist: field };
     chrome.storage.local.set(dataToSave, function() {
     if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
@@ -9,7 +9,7 @@ function save_field(field) {
         console.log("Data saved successfully", field);
     }
     });
-};
+}
 
 function get_field() {
     return new Promise(function(resolve, reject) {
@@ -27,12 +27,13 @@ function get_field() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var inputField = document.getElementById('inputField');
-    var submitButton = document.getElementById('submitButton');
-    var syncButton = document.getElementById('syncButton');
+    let inputField = document.getElementById('inputField');
+    let submitButton = document.getElementById('submitButton');
+    let syncButton = document.getElementById('syncButton');
+    let spotifyButton = document.getElementById('spotifyButton');
 
     submitButton.addEventListener('click', function () {
-        var inputValue = String(inputField.value);
+        let inputValue = String(inputField.value);
         save_field(inputValue);
     });
 
@@ -43,6 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(function(tracks) {
                 tracks.forEach(function (element) {console.log(element)})
             });
-        }    //  Qqc que cette merde 
+        }
     )});
+
+    spotifyButton.addEventListener('click', function () {
+        var client_id = "291641f3871b47668676c7a385fc9db1"
+        var redirect_uri = 'chrome-extension://godlifgnpblhinnodgkjpblbadellokf/callback_spotify/callback.html'
+
+        let url = "https://accounts.spotify.com/authorize?client_id=" + client_id + "&response_type=code&redirect_uri=" + redirect_uri;
+        chrome.windows.create({url: url});
+    });
 });

@@ -1,7 +1,7 @@
 function request_deezer(sharedLink) {
     return new Promise(function(resolve, reject) {
         //https://deezer.page.link/XRcZ9eKhfgaWY5rB7
-        var requestSharedLink = new Request(sharedLink);
+        let requestSharedLink = new Request(sharedLink);
 
         fetch(requestSharedLink)
         .then(function (reponse) {
@@ -29,15 +29,15 @@ function extract_num_playlist(url) {
   
 function get_playlist(num_playlist) {
     return new Promise(function(resolve, reject) {
-        var url_playlist = "https://api.deezer.com/playlist/" + num_playlist;
-        var requestPlaylist = new Request(url_playlist);
+        let url_playlist = "https://api.deezer.com/playlist/" + num_playlist;
+        let requestPlaylist = new Request(url_playlist);
 
         fetch(requestPlaylist)
         .then(function (reponse) {
             return reponse.json();
         })
         .then(function (json) {
-            var tracks = json.tracks.data
+            let tracks = json.tracks.data
             resolve(tracks);
         })
     })
