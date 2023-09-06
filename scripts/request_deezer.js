@@ -14,15 +14,12 @@ function request_deezer(sharedLink) {
 }
 
 function extract_num_playlist(url) {
-    // Utilisation d'une expression régulière pour extraire les numéros
     const regex = /\/playlist\/(\d+)\?/;
     const match = url.match(regex);
-  
-    // Si des correspondances sont trouvées, retourner le numéro
+
     if (match && match.length > 1) {
         return match[1];
     } else {
-        // Retourner null si aucune correspondance n'est trouvée
         return null;
     }
 } 

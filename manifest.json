@@ -9,8 +9,14 @@
     },
     "permissions": [
         "tabs",
-        "storage",
-        "webRequest"
+        "storage"
+    ],
+    
+    "web_accessible_resources": [
+        {
+            "resources": ["callback_spotify/*"],
+            "matches": ["https://*.spotify.com/*"]
+        }
     ],
     "background": {
         "service_worker": "service-worker.js"
@@ -20,7 +26,7 @@
             "matches": [
                 "<all_urls>"
             ],
-            "js": ["popup/popup.js", "scripts/request_deezer.js", "callback_spotify/callback.js"]
+            "js": ["popup/popup.js", "scripts/request_deezer.js", "callback_spotify/callback.js", "scripts/request_spotify.js"]
           
         }
     ]

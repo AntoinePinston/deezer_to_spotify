@@ -1,28 +1,10 @@
-//https://deezer.page.link/XRcZ9eKhfgaWY5rB7
+const token_channel = new BroadcastChannel("token_spotify");
 
-function save_field(field) {
-    let dataToSave = { playlist: field };
-    chrome.storage.local.set(dataToSave, function() {
-    if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-    } else {
-        console.log("Data saved successfully", field);
-    }
-    });
-}
-
-function get_field() {
-    return new Promise(function(resolve, reject) {
-        chrome.storage.local.get("playlist")
-        .then(function(data) {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError);
-                reject(chrome.runtime.lastError);
-            } else {
-                console.log("Retrieved data:", data.playlist);
-                resolve(String(data.playlist));
-            }
-        });
+function waitToken() {
+    return new Promise((resolve) => {
+        token_channel.onmessage = (event) => {
+            resolve(event.data);
+        };
     });
 }
 
@@ -34,11 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener('click', function () {
         let inputValue = String(inputField.value);
-        save_field(inputValue);
+        saveLocal("playlist", inputValue);
     });
 
     syncButton.addEventListener('click', function () {
-        get_field()
+        getField("playlist")
         .then(function(playlist) {
             request_deezer(playlist)
             .then(function(tracks) {
@@ -47,11 +29,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     )});
 
-    spotifyButton.addEventListener('click', function () {
+    spotifyButton.addEventListener('click', async function () {
         var client_id = "291641f3871b47668676c7a385fc9db1"
         var redirect_uri = 'chrome-extension://godlifgnpblhinnodgkjpblbadellokf/callback_spotify/callback.html'
+        var url = "https://accounts.spotify.com/authorize?client_id=" + client_id;
+        url += "&response_type=code&redirect_uri="+ redirect_uri;
+        url += "&scope=user-read-private+user-read-email";
+        url += "&show_dialog=true";
 
-        let url = "https://accounts.spotify.com/authorize?client_id=" + client_id + "&response_type=code&redirect_uri=" + redirect_uri;
-        chrome.windows.create({url: url});
+        var spotify_id
+        chrome.windows.create({url: url}, (window) => {
+            spotify_id = window.id;
+        })
+
+        var token_spotify = await waitToken()
+        token_channel.close()
+
+        if (spotify_id) {
+            chrome.windows.remove(spotify_id, () => {})
+        }
+
+        get_user_id(token_spotify).then(reponse => {
+            console.log("reponse : ", reponse);
+        })
+
     });
 });
