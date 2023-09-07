@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var redirect_uri = 'chrome-extension://godlifgnpblhinnodgkjpblbadellokf/callback_spotify/callback.html'
         var url = "https://accounts.spotify.com/authorize?client_id=" + client_id;
         url += "&response_type=code&redirect_uri="+ redirect_uri;
-        url += "&scope=user-read-private+user-read-email";
+        url += "&scope=user-read-private+user-read-email+playlist-modify-public+playlist-modify-private";
         url += "&show_dialog=true";
 
         var spotify_id
@@ -49,9 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.windows.remove(spotify_id, () => {})
         }
 
-        get_user_id(token_spotify).then(reponse => {
-            console.log("reponse : ", reponse);
-        })
-
+        var id = await get_user_id(token_spotify)
+        playlist_id = await create_playlist(token_spotify, id, "test")
+        console.log(playlist_id)
     });
 });
