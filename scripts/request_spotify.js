@@ -31,3 +31,55 @@ function create_playlist(token, user_id, name_playlist) {
     })
 }
 
+function fill_playlist(token, playlist_id, tracks) {
+    tracks.forEach(async track => {
+        res_t = await find_track(track, token)
+        await add_track_playlist(token, playlist_id, res_t)
+    });
+}
+
+function find_track(track, token) {
+    return new Promise(function(resolve, reject) {
+        url = 'https://api.spotify.com/v1/search?q=' + `${track.artist.name}%20${track.title}`
+        url += "&type=track&limit=1"
+        var options = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+        }
+        fetch(url, options)
+        .then(response => response.json())
+        .then(response => resolve(response.tracks.items[0]))
+    })
+}
+
+function add_track_playlist(token, playlist_id, track) {
+    return new Promise(function(resolve, reject) {
+        const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        };
+
+        const data = {
+            uris: [`spotify:track:${track.id}`],
+        };
+
+        const options = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data),
+        };
+
+        fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add track to playlist');
+                }
+                return response.json();
+            })
+            .then(response => {
+                resolve(); // You can return the response from the API here if needed
+            })
+    });
+}
