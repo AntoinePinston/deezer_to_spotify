@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // TODO check if connection spotify done beofore
         var id = await get_user_id(token_spotify)
         var playlist_id = await create_playlist(token_spotify, id, "DeezerToSpotify")
-        console.log(playlist_id)
         fill_playlist(token_spotify, playlist_id, tracks)
     });
 

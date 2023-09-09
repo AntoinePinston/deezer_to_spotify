@@ -34,6 +34,7 @@ function create_playlist(token, user_id, name_playlist) {
 function fill_playlist(token, playlist_id, tracks) {
     tracks.forEach(async track => {
         res_t = await find_track(track, token)
+        console.log("adding ", res_t)
         await add_track_playlist(token, playlist_id, res_t)
     });
 }
