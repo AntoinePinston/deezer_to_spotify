@@ -32,15 +32,16 @@ function create_playlist(token, user_id, name_playlist) {
 }
 
 async function fill_playlist(token, playlist_id, tracks) {
-    let res_t = [];
+    let res_tracks = [];
 
     for (const track of tracks) {
         let t = await find_track(track, token);
-        res_t.push(t);
+        res_tracks.push(t);
     }
-    for (let i = 0; i < res_t.length; i += 10) {
-        const tracks = res_t.slice(i, i + 10);
-        await add_track_playlist(token, playlist_id, tracks);
+    for (let i = 0; i < res_tracks.length; i += 99) {
+        const tracks = res_tracks.slice(i, i + 99);
+        await add_tracks_playlist(token, playlist_id, tracks);
+        await new Promise(resolve => setTimeout(resolve, 500));
     }
 }
 
@@ -55,11 +56,19 @@ function find_track(track, token) {
         }
         fetch(url, options)
         .then(response => response.json())
-        .then(response => resolve(response.tracks.items[0]))
+        .then(response => {
+            if (response.tracks != null) {
+                // we get the first hit on the search
+                resolve(response.tracks.items[0])
+            }
+            else {
+                console.log("Unknown title", track.title)
+            }
+            })
     })
 }
 
-function add_track_playlist(token, playlist_id, tracks) {
+function add_tracks_playlist(token, playlist_id, tracks) {
     return new Promise(function(resolve, reject) {
         const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
         const headers = {
@@ -71,7 +80,10 @@ function add_track_playlist(token, playlist_id, tracks) {
             uris: [],
         };
         for (let i = 0; i < tracks.length; i++) {
-            data.uris.push(`spotify:track:${tracks[i].id}`);
+            if (tracks[i] != null) {
+                // security
+                data.uris.push(`spotify:track:${tracks[i].id}`);
+            }
         }
 
         const options = {
@@ -88,7 +100,7 @@ function add_track_playlist(token, playlist_id, tracks) {
                 return response.json();
             })
             .then(response => {
-                resolve(); // You can return the response from the API here if needed
+                resolve();
             })
     });
 }

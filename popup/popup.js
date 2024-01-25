@@ -11,17 +11,7 @@ function waitToken() {
 
 document.addEventListener('DOMContentLoaded', function () {
     let inputField = document.getElementById('inputField');
-    let submitButton = document.getElementById('submitButton');
     let spotifyButton = document.getElementById('spotifyButton');
-
-    submitButton.addEventListener('click', async function () {
-        let inputValue = String(inputField.value);
-        let tracks = await request_deezer(inputValue)
-        // TODO check if connection spotify done before
-        var id = await get_user_id(token_spotify)
-        var playlist_id = await create_playlist(token_spotify, id, "DeezerToSpotify")
-        await fill_playlist(token_spotify, playlist_id, tracks)
-    });
 
     spotifyButton.addEventListener('click', async function () {
         var client_id = "291641f3871b47668676c7a385fc9db1"
@@ -42,5 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (spotify_id) {
             chrome.windows.remove(spotify_id)
         }
+        let inputValue = String(inputField.value);
+        let tracks = await request_deezer(inputValue)
+        // TODO check if connection spotify done before
+        var id = await get_user_id(token_spotify)
+        var playlist_id = await create_playlist(token_spotify, id, "DeezerToSpotify")
+        await fill_playlist(token_spotify, playlist_id, tracks)
     });
 });
