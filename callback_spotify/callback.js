@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (code) {
         const baseURL = 'https://accounts.spotify.com/api/token';
-        const redirectURI = 'chrome-extension://godlifgnpblhinnodgkjpblbadellokf/callback_spotify/callback.html';
+        const redirectURI = `chrome-extension://${chrome.runtime.id}/callback_spotify/callback.html`;
 
         const data = new URLSearchParams();
         data.append('grant_type', "authorization_code");

@@ -11,7 +11,7 @@ function get_user_id(token) {
 
 function create_playlist(token, user_id, name_playlist) {
     return new Promise(function(resolve, reject) {
-        const baseURL = "https://api.spotify.com/v1/users/"+ user_id + "/playlists";
+        const baseURL = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
         const headers = {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -31,12 +31,17 @@ function create_playlist(token, user_id, name_playlist) {
     })
 }
 
-function fill_playlist(token, playlist_id, tracks) {
-    tracks.forEach(async track => {
-        res_t = await find_track(track, token)
-        console.log("adding ", res_t)
-        await add_track_playlist(token, playlist_id, res_t)
-    });
+async function fill_playlist(token, playlist_id, tracks) {
+    let res_t = [];
+
+    for (const track of tracks) {
+        let t = await find_track(track, token);
+        res_t.push(t);
+    }
+    for (let i = 0; i < res_t.length; i += 10) {
+        const tracks = res_t.slice(i, i + 10);
+        await add_track_playlist(token, playlist_id, tracks);
+    }
 }
 
 function find_track(track, token) {
@@ -54,7 +59,7 @@ function find_track(track, token) {
     })
 }
 
-function add_track_playlist(token, playlist_id, track) {
+function add_track_playlist(token, playlist_id, tracks) {
     return new Promise(function(resolve, reject) {
         const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
         const headers = {
@@ -63,8 +68,11 @@ function add_track_playlist(token, playlist_id, track) {
         };
 
         const data = {
-            uris: [`spotify:track:${track.id}`],
+            uris: [],
         };
+        for (let i = 0; i < tracks.length; i++) {
+            data.uris.push(`spotify:track:${tracks[i].id}`);
+        }
 
         const options = {
             method: 'POST',
