@@ -20,18 +20,20 @@ document.addEventListener('DOMContentLoaded', function () {
         url +=    "&response_type=code&redirect_uri="+ redirect_uri;
         url +=    "&scope=user-read-private+user-read-email+playlist-modify-public+playlist-modify-private";
         url +=    "&show_dialog=false";
+        
+        if (token_spotify == null) {
+            var spotify_id
+            chrome.windows.create({url: url}, (window) => {
+                spotify_id = window.id;
+            })
+            token_spotify = await waitToken()
+            token_channel.close()
 
-        var spotify_id
-        chrome.windows.create({url: url}, (window) => {
-            spotify_id = window.id;
-        })
-
-        token_spotify = await waitToken()
-        token_channel.close()
-
-        if (spotify_id) {
-            chrome.windows.remove(spotify_id)
+            if (spotify_id) {
+                chrome.windows.remove(spotify_id)
+            }
         }
+        
         let inputValue = String(inputField.value);
         let tracks = await request_deezer(inputValue)
         // TODO check if connection spotify done before

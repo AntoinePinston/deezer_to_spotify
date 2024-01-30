@@ -47,7 +47,14 @@ async function fill_playlist(token, playlist_id, tracks) {
 
 function find_track(track, token) {
     return new Promise(function(resolve, reject) {
-        url = 'https://api.spotify.com/v1/search?q=' + `${track.artist.name}%20${track.title}`
+        url = 'https://api.spotify.com/v1/search?q='
+        if (track.artist.name != null) {
+            url += `${track.artist.name}`
+        }
+        if (track.title != null || track.title != '') {
+            url += `%20${track.title}`
+        }
+
         url += "&type=track&limit=1"
         var options = {
             headers: {

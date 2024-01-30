@@ -5,7 +5,7 @@
     "version": "1.0",
     "action": {
         "default_popup": "popup/main.html",
-        "default_icon": "icons/popup.png"
+        "default_icon": "icons/deezer2spotify.png"
     },
     "permissions": [
         "tabs",
