@@ -9,7 +9,8 @@
     },
     "permissions": [
         "tabs",
-        "storage"
+        "storage",
+        "identity"
     ],
     
     "web_accessible_resources": [
@@ -18,9 +19,6 @@
             "matches": ["https://*.spotify.com/*"]
         }
     ],
-    "background": {
-        "service_worker": "service-worker.js"
-    },
     "content_scripts": [
         {
             "matches": [
