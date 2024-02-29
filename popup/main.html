@@ -4,10 +4,19 @@
         <script src="../callback_spotify/callback.js"></script>
         <script src="../scripts/request_deezer.js"></script>
         <script src="../scripts/request_spotify.js"></script>
+        <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <h1>Convert playlist</h1>
-        <input type="text" id="inputField" placeholder="Entrez une valeur" value="https://www.deezer.com/fr/playlist/1042888117">
-        <button id="convert_button">Convert to spotify</button>
+        <div id="overlay" class="overlay">
+            <h1>Connect to spotify !</h1>
+        </div>
+        <div class="background">
+            <h1>Convert playlist</h1>
+            <input type="text" id="deezerUrl" placeholder="Entrez une valeur" value="https://www.deezer.com/fr/playlist/1042888117">
+            <button id="convert_button">Send to Spotify</button>
+        </div>
+        <div id="congrats" hidden=true>
+            <h1>Done, congrats :D</h1>
+        </div>
     </body>
 </html>

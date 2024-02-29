@@ -1,11 +1,11 @@
-function request_deezer(link) {
-    return new Promise(async function(resolve, reject) {
-        tracks = await get_tracks_playlist(extract_num_playlist(link))
+function getDeezerTracks(link) {
+    return new Promise(async function(resolve) {
+        tracks = await getTracksPlaylist(extractNumPlaylist(link))
         resolve(tracks)
     })
 }
 
-function extract_num_playlist(url) {
+function extractNumPlaylist(url) {
     const regex = /\/playlist\/(\d+)\/?/;
     const match = url.match(regex);
 
@@ -16,10 +16,10 @@ function extract_num_playlist(url) {
     }
 } 
   
-function get_tracks_playlist(num_playlist) {
+function getTracksPlaylist(num_playlist) {
     return new Promise(async function(resolve, reject) {
-        let url_playlist = `https://api.deezer.com/playlist/${num_playlist}/tracks`;
-        let requestPlaylist = new Request(url_playlist);
+        let urlPlaylist = `https://api.deezer.com/playlist/${num_playlist}/tracks`;
+        let requestPlaylist = new Request(urlPlaylist);
         let tracks = []
         
         var reponse = await fetch(requestPlaylist).then(function (reponse) {return reponse.json()})

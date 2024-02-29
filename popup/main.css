@@ -1,0 +1,13 @@
+.background {
+/* Styles for the bottom div */
+}
+  
+.overlay {
+position: absolute; /* Removes from normal flow */
+top: 0; /* Positions it at the top */
+left: 0; /* Positions it at the left */
+width: 100%; /* Set width and height if needed */
+height: 100%; 
+z-index: 1; /* Higher value appears on top */
+background-color: aquamarine;
+}

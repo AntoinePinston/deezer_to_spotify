@@ -1,5 +1,5 @@
 function get_user_id(token) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
 
         fetch('https://api.spotify.com/v1/me', {
             headers: {
@@ -10,7 +10,7 @@ function get_user_id(token) {
 }
 
 function create_playlist(token, user_id, name_playlist) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         const baseURL = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
         const headers = {
             'Authorization': `Bearer ${token}`,
@@ -46,7 +46,7 @@ async function fill_playlist(token, playlist_id, tracks) {
 }
 
 function find_track(track, token) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         url = 'https://api.spotify.com/v1/search?q='
         if (track.artist.name != null) {
             url += `${track.artist.name}`
@@ -71,12 +71,13 @@ function find_track(track, token) {
             else {
                 console.log("Unknown title", track.title)
             }
-            })
+        })
     })
 }
 
 function add_tracks_playlist(token, playlist_id, tracks) {
-    return new Promise(function(resolve, reject) {
+    // Should be less than 100 tracks
+    return new Promise(function(resolve) {
         const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
         const headers = {
             'Authorization': 'Bearer ' + token,
@@ -86,6 +87,7 @@ function add_tracks_playlist(token, playlist_id, tracks) {
         const data = {
             uris: [],
         };
+
         for (let i = 0; i < tracks.length; i++) {
             if (tracks[i] != null) {
                 // security
@@ -99,15 +101,7 @@ function add_tracks_playlist(token, playlist_id, tracks) {
             body: JSON.stringify(data),
         };
 
-        fetch(url, options)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to add track to playlist');
-                }
-                return response.json();
-            })
-            .then(response => {
-                resolve();
-            })
+        fetch(url, options);
+        resolve();
     });
 }

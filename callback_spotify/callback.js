@@ -1,6 +1,6 @@
 const token_chanel = new BroadcastChannel("token_spotify");
 
-function get_token_from_code(code) {
+function getTokenFromCode(code) {
     const baseURL = 'https://accounts.spotify.com/api/token';
     const redirectURI = `chrome-extension://${chrome.runtime.id}/callback_spotify/callback.html`;
 
@@ -37,6 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var code = urlParams.get("code");
 
     if (code) {
-        get_token_from_code(code)
+        getTokenFromCode(code)
     }
 });

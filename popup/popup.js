@@ -1,56 +1,54 @@
-const token_channel = new BroadcastChannel("token_spotify");
-var token_spotify; 
+const tokenChannel = new BroadcastChannel("token_spotify");
+var tokenSpotify; 
 
 function waitToken() {
     return new Promise((resolve) => {
-        token_channel.onmessage = (event) => {
+        tokenChannel.onmessage = (event) => {
             resolve(event.data);
         };
     });
 }
 
-async function click_button(value_button, token_spotify) {
-    let tracks = await request_deezer(value_button)
-    // TODO check if connection spotify done before
-    var id = await get_user_id(token_spotify)
-    var playlist_id = await create_playlist(token_spotify, id, "DeezerToSpotify")
-    await fill_playlist(token_spotify, playlist_id, tracks)
-}
-
-async function connect_to_spotify() {
-    var spotify_api_entrypoint = "291641f3871b47668676c7a385fc9db1"
-    var redirect_uri = `chrome-extension://${chrome.runtime.id}/callback_spotify/callback.html`
-    var url = "https://accounts.spotify.com/authorize?client_id=" + spotify_api_entrypoint;
-    url +=    "&response_type=code&redirect_uri="+ redirect_uri;
+async function connectToSpotify() {
+    var spotifyClient = "291641f3871b47668676c7a385fc9db1"
+    var redirectUri = `chrome-extension://${chrome.runtime.id}/callback_spotify/callback.html`
+    var url = "https://accounts.spotify.com/authorize?client_id=" + spotifyClient;
+    url +=    "&response_type=code&redirect_uri="+ redirectUri;
     url +=    "&scope=user-read-private+user-read-email+playlist-modify-public+playlist-modify-private";
     url +=    "&show_dialog=true&interactive=true";
     
-    if (token_spotify == null) {
-        var spotify_id
+    if (tokenSpotify == null) {
+        var spotifyId
         chrome.windows.create({url: url}, (window) => {
-            spotify_id = window.id;
+            spotifyId = window.id;
         })
-        token_spotify = await waitToken()
-        token_channel.close()
+        tokenSpotify = await waitToken()
+        tokenChannel.close()
 
-        if (spotify_id) {
-            chrome.windows.remove(spotify_id)
+        if (spotifyId) {
+            chrome.windows.remove(spotifyId)
         }
     }
-    return token_spotify
+    return tokenSpotify
 }
 
-
-
 document.addEventListener('DOMContentLoaded', async function () {
-    let inputField = document.getElementById('inputField');
-    let convert_button = document.getElementById('convert_button');
+    // Get usefull document id
+    let convertButton = document.getElementById('convert_button');
+    let overlay = document.getElementById('overlay');
+    let congrat = document.getElementById("congrats");
 
-    token_spotify = await connect_to_spotify()
+    tokenSpotify = await connectToSpotify();
+    // Suppress the overlay
+    overlay.style.display = "none";
 
-    convert_button.addEventListener('click', async function () {
-
-        click_button(String(inputField), token_spotify)
-        
+    convertButton.addEventListener('click', async function () {
+        congrat.style.display = "none"
+        let deezerUrl = String(document.getElementById('deezerUrl').value)
+        let tracks = await getDeezerTracks(deezerUrl)
+        var id = await get_user_id(tokenSpotify)
+        var playlist_id = await create_playlist(tokenSpotify, id, "DeezerToSpotify")
+        await fill_playlist(tokenSpotify, playlist_id, tracks)
+        congrat.style.display = "block"
     });
 });
