@@ -9,8 +9,7 @@
     },
     "permissions": [
         "tabs",
-        "storage",
-        "identity"
+        "chrome-extension://*/icons/deezer2spotify.jpg"
     ],
     
     "web_accessible_resources": [
