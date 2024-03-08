@@ -3,6 +3,7 @@ width: 320px;
 height: 135px;
 color: #5f5f5f;
 line-height: 18px;
+background-color: #f4a261;
 }
 
 input {
@@ -16,8 +17,6 @@ align-items: center;
 flex-direction: column;
 }
 
-
-  
 .overlay {
 position: absolute;
 top: 0;
@@ -34,4 +33,38 @@ align-items: center;
 
 h1 {
     text-align: center;
+    color: #264653;
+}
+
+/* CSS */
+button {
+  appearance: none;
+  background-color: #e76f51;
+  border: 1px solid #e76f51;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #264653;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+
+
+input[type=text] {
+    background-color: #e9c46a;
+    color: #264653;
+}
+
+input[type=text]:focus {
+  border: 2px solid #e76f51;
 }

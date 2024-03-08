@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         message.textContent = "Searching deezer tracks"
         let deezerUrl = String(document.getElementById('deezerUrl').value)
         let tracks = await getDeezerTracks(deezerUrl)
-        message.textContent = "Fill spotify playlist"
+        message.textContent = "Currently filling the spotify playlist"
         var id = await get_user_id(tokenSpotify)
         var playlistID = await createPlaylist(tokenSpotify, id, "DeezerToSpotify")
         await editIcon(tokenSpotify, playlistID, "../icons/deezer2spotify.jpg")
