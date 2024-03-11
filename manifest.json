@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "deezerToSpotify",
+    "name": "DeezerToSpotify",
     "description": "Convert deezer playlist to spotify",
     "version": "1.0",
     "action": {
@@ -8,8 +8,7 @@
         "default_icon": "icons/deezer2spotify.png"
     },
     "permissions": [
-        "tabs",
-        "chrome-extension://*/icons/deezer2spotify.jpg"
+        "tabs"
     ],
     
     "web_accessible_resources": [

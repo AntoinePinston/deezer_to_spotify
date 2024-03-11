@@ -15,7 +15,7 @@ async function connectToSpotify() {
     var url = "https://accounts.spotify.com/authorize?client_id=" + spotifyClient;
     url +=    "&response_type=code&redirect_uri="+ redirectUri;
     url +=    "&scope=user-read-private+user-read-email+playlist-modify-public+playlist-modify-private+ugc-image-upload";
-    //url +=    "&show_dialog=true&interactive=true";
+    
     
     if (tokenSpotify == null) {
         var spotifyId
